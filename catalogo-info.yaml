@@ -1,0 +1,45 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openapi-autenticacao
+  title: API de Autenticação (SSO)
+  description: Contrato OAuth2/OIDC para geração e validação de tokens JWT.
+  tags: [rest, oauth2, security]
+  annotations:
+    github.com/project-slug: myorg/api-autenticacao
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:squad-identity
+  system: identity-access
+  definition: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Autenticação API
+    paths:
+      /oauth/token:
+        post:
+          summary: Gera um token de acesso JWT
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: api-autenticacao
+  title: Autenticação Core API
+  description: Microsserviço de autenticação central. Emite tokens e valida credenciais.
+  tags: [java, spring-boot, microservice, security]
+  annotations:
+    github.com/project-slug: myorg/api-autenticacao
+spec:
+  type: service
+  lifecycle: production
+  owner: group:squad-identity
+  system: identity-access
+  providesApis:
+    - openapi-autenticacao
+  dependsOn:
+    - resource:default/db-usuarios-iam
+    - resource:default/cache-sessoes-redis
+    - resource:default/kafka-auditoria-iam
