@@ -24,6 +24,32 @@ spec:
           summary: Gera um token de acesso JWT
 ---
 apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: asyncapi-auditoria-iam
+  title: Eventos de Auditoria IAM
+  description: Tópico de eventos de segurança (logins com falha, troca de senhas, bloqueios).
+  tags: [kafka, security, audit]
+  annotations:
+    github.com/project-slug: myorg/identity-access-platform
+spec:
+  type: asyncapi
+  lifecycle: production
+  owner: group:squad-identity
+  system: identity-access
+  definition: |
+    asyncapi: 2.0.0
+    info:
+      title: IAM Security Events
+      version: 1.0.0
+    channels:
+      iam.security.alerts:
+        publish:
+          message:
+            payload:
+              type: object
+---
+apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: api-autenticacao
